@@ -1,23 +1,23 @@
-   {
-     "name": "adds-up",
-     "displayName": "Adds Up",
-     "version": "0.1.0",
-     "description": "Checks whether the numbers in a document, deck, spreadsheet or PDF add up: totals, percentages, units, dates and figures that contradict each other, with the arithmetic shown.",
-     "author": {
-       "name": "Murat Matur",
-       "url": "https://github.com/Aphro4266"
-     },
-     "homepage": "https://github.com/Aphro4266/adds-up",
-     "repository": "https://github.com/Aphro4266/adds-up",
-     "license": "MIT",
-     "keywords": [
-       "numbers",
-       "arithmetic",
-       "totals",
-       "percentages",
-       "spreadsheet",
-       "proofreading",
-       "consistency",
-       "review"
-     ]
-   }
+{
+  "name": "adds-up",
+  "displayName": "Adds Up",
+  "version": "0.1.0",
+  "description": "Checks whether the numbers in a document, deck, spreadsheet or PDF add up: totals, percentages, units, dates and figures that contradict each other, with the arithmetic shown.",
+  "author": {
+    "name": "Murat Matur",
+    "url": "https://github.com/Aphro4266"
+  },
+  "homepage": "https://github.com/Aphro4266/adds-up",
+  "repository": "https://github.com/Aphro4266/adds-up",
+  "license": "MIT",
+  "keywords": [
+    "numbers",
+    "arithmetic",
+    "totals",
+    "percentages",
+    "spreadsheet",
+    "proofreading",
+    "consistency",
+    "review"
+  ]
+}
