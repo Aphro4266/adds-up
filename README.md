@@ -31,6 +31,8 @@ Attach or point to the files and ask in your own words:
 
 In Cowork and Claude Code you can also call the skill directly with `/adds-up:check`.
 
+You do not always have to ask. Adds Up also runs on its own when you ask Claude to review or proofread a document that contains figures, when you say you are about to send or present it, and as a last check on documents with calculations that Claude writes for you. In those cases it adds a short note: either one line saying the numbers were checked, or a small table of the errors it found. Say "no numbers checks" if you would rather it stayed quiet.
+
 It reads Word (`.docx`), PowerPoint (`.pptx`), Excel (`.xlsx`, `.xlsm`), CSV, Markdown, plain text and PDF, and it works on text pasted into the conversation. Number formats with a decimal point and with a decimal comma are both understood, and so are total labels and weekday and month names in English, German, Turkish, French and Spanish.
 
 ## What you get back
