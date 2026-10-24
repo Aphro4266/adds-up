@@ -1,6 +1,6 @@
 ---
 name: check
-description: Check whether the numbers in a document, slide deck, spreadsheet, PDF or pasted text add up. Use when the user asks to check, verify, sanity-check or proof the figures, totals, sums, percentages, calculations, dates or units in a report, budget, quote, invoice, proposal, table, deck or spreadsheet; asks "do the numbers add up" or "is the maths right"; wants figures cross-checked across several files; or wants a last numbers check before sending something. Applies in any language, for example "Zahlen prüfen", "stimmen die Summen", "rakamları kontrol et". Finds wrong totals, percentages that do not match their counts, broken spreadsheet formulas, unit and number-format mix-ups, impossible dates and figures that contradict each other, and shows the arithmetic for each one.
+description: Check whether the numbers in a document, slide deck, spreadsheet, PDF or pasted text add up. Use when the user asks to check, verify or proof the figures, totals, percentages, calculations, dates or units, or asks "do the numbers add up" or "is the maths right". Also use it unprompted when the user asks for a review, proofread, feedback or a final look at a report, budget, quote, invoice, proposal, business case or deck that contains figures, or says they are about to send, submit or present it; and as a last check before handing over a document Claude has just written that contains totals, percentages or calculated figures. Any language, for example "Zahlen prüfen", "schau mal drüber", "rakamları kontrol et". Finds wrong totals, percentages that do not match their counts, broken formulas, unit mix-ups, impossible dates and contradicting figures, with the arithmetic shown.
 ---
 
 # Adds Up
@@ -10,6 +10,18 @@ Check the arithmetic and the internal consistency of the material and report wha
 The job is narrow on purpose: numbers, units, dates, counts, and whether statements about them agree with each other. Leave writing style, grammar, structure and the quality of the argument alone unless the user asks for those as well.
 
 A good check has three properties. Every finding can be verified by the reader in under a minute, because it says where the figure is, what the document states and what the arithmetic gives. Nothing is reported that the material itself does not support, because one false alarm costs more trust than a missed rounding difference. And the report says what was covered and what could not be seen.
+
+## When the check was not asked for by name
+
+The skill also runs as a side check: the user asked for a review or a proofread, said they are about to send something, or Claude has just produced a document with calculated figures. In those cases the user did not ask for a numbers report, so keep it short.
+
+- Run it only when the material contains figures that can be tested: a table, a total, a percentage, a calculation or a date with a weekday. Skip it for material without figures, and do not run it twice on the same unchanged file in one conversation.
+- Do the full check (steps 2 to 7), but report only what is Wrong or a Conflict, in a short table under the heading **Adds Up**, after the answer to what the user actually asked. Leave out Queries, the working and "Worth knowing". End with one line: "Ask for the full Adds Up report for the working and the open queries."
+- When nothing is wrong, write one line: "**Adds Up:** numbers checked, no errors found (2 tables, 9 figures)."
+- When the document is one Claude has just written, correct its own errors before handing it over and list each correction in one line, rather than reporting them as findings.
+- If the user says they do not want these checks, stop running them for the rest of the conversation.
+
+When the user asks for the check by name, follow the steps and the report format below in full.
 
 ## Steps
 
