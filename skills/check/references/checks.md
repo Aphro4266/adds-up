@@ -1,6 +1,6 @@
 # Check families
 
-What to look for beyond the leads the script produces, family by family. Each entry says what goes wrong and how to test it. Use the families that fit the material.
+What to look for beyond the leads from `rules.md`, family by family. Each entry says what goes wrong and how to test it. Use the families that fit the material.
 
 ## 1. Sums and totals
 
@@ -30,7 +30,7 @@ What to look for beyond the leads the script produces, family by family. Each en
 - **Percentage points against percent.** A rise from 28% to 34% is 6 percentage points and 21.4 percent. "An increase of 6%" is wrong for it.
 - **Changes do not cancel.** Down 50% and then up 50% leaves 75% of the start. Up 20% twice is 44%, not 40%.
 - **Impossible values.** A share above 100%, a decrease of more than 100%, a response rate above 100%.
-- **Percentages of small samples.** With n = 12 only multiples of 8.33% can occur. Use the `grim` command for any percentage or mean reported with its n.
+- **Percentages of small samples.** With n = 12 only multiples of 8.33% can occur. Use the GRIM test in `rules.md` for any percentage or mean reported with its n.
 
 ## 4. Counts and enumerations
 
@@ -42,7 +42,7 @@ What to look for beyond the leads the script produces, family by family. Each en
 
 ## 5. Dates and durations
 
-- **Weekdays.** The script checks dates written with a year. For a date without a year, use the year the document implies and say that you assumed it.
+- **Weekdays.** The weekday rule in `rules.md` covers dates written with a year. For a date without a year, use the year the document implies and say that you assumed it.
 - **Durations.** Compute end minus start. "1 March to 31 May, 14 weeks" is 91 days, 13 weeks. Check whether both end days are meant to be counted.
 - **Order.** Milestones in sequence, a deadline after the start, a delivery date after the order date, a signature date not after the effective date unless the text says so.
 - **Deadlines from rules.** "Payment within 30 days of the invoice date" against the due date that is printed.
@@ -63,13 +63,12 @@ What to look for beyond the leads the script produces, family by family. Each en
 
 - **Summary against body.** Every number in the abstract, executive summary, key messages or covering email should match the body exactly, including the rounding.
 - **Text against table.** A sentence that describes a table has to quote the table's numbers.
-- **Chart against text.** Chart data read by the script comes from the chart's stored values. Compare it with the title, the labels and the sentence that describes the chart. Stored shares arrive as fractions (0.36); write them as percentages when the text does.
+- **Chart against text.** Chart data read from the file comes from the chart's stored values. Compare it with the title, the labels and the sentence that describes the chart. Stored shares arrive as fractions (0.36); write them as percentages when the text does.
 - **Pie charts.** A pie always fills the circle. If its values total 102%, every slice is drawn smaller than its label says, and the chart matches none of the stated figures.
 - **A count in the text that drives a table.** "18 people confirmed" and a quantity of 18 in every per-head row. If the headcount changes, every row changes.
 - **Slide against notes.** Speaker notes often hold an older version of the number on the slide.
 - **Repeated tables.** The same table in the main text and an appendix, or in the deck and the spreadsheet behind it.
 - **Rounding consistency.** 12.4% in one place and 12.6% in another is a Conflict. 12.4% and "about 12%" is not.
-
 - **Rankings and superlatives.** "The largest contributor", "the fastest-growing unit", "more than half of". Compute the ranking or the comparison from the document's figures. If the claim fails under the natural reading of its terms, it is Wrong; state the reading you used.
 
 ## 8. Basic statistics
@@ -81,11 +80,11 @@ Use only when the material reports statistics, and only what can be tested from 
 - **Intervals and p-values.** A 95% interval for a difference that excludes 0, or for a ratio that excludes 1, goes with p < 0.05, and the reverse. A mismatch is a Query, because the test may differ from the interval method.
 - **Ranges.** Minimum ≤ median ≤ maximum, and the mean lies between minimum and maximum.
 - **Group sizes.** The groups add to the total, and the degrees of freedom fit the stated n.
-- **Whole-number data.** A mean of 3.47 from 25 whole-number scores cannot occur. The `grim` command tests it. It applies only when every single value is a whole number, and it says little when n is large: with n = 240 every whole percentage is possible.
+- **Whole-number data.** A mean of 3.47 from 25 whole-number scores cannot occur. The GRIM test in `rules.md` tests it. It applies only when every single value is a whole number, and it says little when n is large: with n = 240 every whole percentage is possible.
 
 ## 9. Spreadsheets
 
-The script lists most of these as leads. Confirm each by looking at the formula and its neighbours.
+The spreadsheet rules in `rules.md` turn most of these into leads. Confirm each by looking at the formula and its neighbours.
 
 - **Typed numbers where a formula belongs.** A constant between two cells with the same formula pattern. The number may have been right when typed and stale since.
 - **Formulas that break the pattern.** One cell in a row or column that uses a different formula from its neighbours, such as `=B4+C4` among `=B2*C2`.
@@ -95,7 +94,7 @@ The script lists most of these as leads. Confirm each by looking at the formula 
 - **Error values.** `#REF!`, `#DIV/0!`, `#N/A`, `#VALUE!` in cells that feed other cells.
 - **No stored results.** A file written by a script can hold formulas with no values. The check then covers typed numbers and formula structure only; say so.
 - **Units per column.** One column, one unit. A percentage column holding both 0.12 and 12.
-- **Label against formula.** "Margin (% of revenue)" computed as profit divided by cost. "Average per unit" divided by the wrong count. Read each formula on a summary sheet against its label; the rules do not.
+- **Label against formula.** "Margin (% of revenue)" computed as profit divided by cost. "Average per unit" divided by the wrong count. Read each formula on a summary sheet against its label.
 - **Typed figures on a summary sheet.** A count, a total or a rate that is typed where it could be calculated from another sheet. Recalculate it from that sheet.
 
 ## 10. Across files and sheets

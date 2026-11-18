@@ -31,72 +31,52 @@ Work on whatever the user points at: attached or named files, a folder of files,
 
 ### 2. Extract
 
-When a code tool is available, run the bundled script on the files:
+Get every figure out of the material together with where it sits. `references/reading-files.md` says, for each file type, what to read and what is easy to miss: text boxes, footnotes, headers and footers, chart data, speaker notes, hidden rows and sheets, the formula behind each spreadsheet cell and how a cell is displayed.
 
-```
-python3 ${CLAUDE_SKILL_DIR}/scripts/adds_up.py extract <file> [<file> ...]
-```
+When a code tool is available, read the files with code rather than by eye: Word, PowerPoint and Excel files are zip archives of XML, and code reads tables, chart values and formulas exactly. Use whatever libraries the environment already has and install nothing without asking. Without a code tool, or for pasted text, work from the text as given.
 
-The script is `scripts/adds_up.py`, next to this file. It uses the Python standard library only, makes no network requests and changes no file. It reads:
+Label every figure with a location the reader can find: section heading and paragraph, table caption and row label, slide number, sheet and cell, PDF page and line. For scanned pages and figures inside images, read them visually and say in the report that those figures were read by eye.
 
-| File | What it reads | What it leaves out |
-|------|---------------|--------------------|
-| `.docx` | Paragraphs, tables, text boxes, footnotes, page headers and footers, the stored data of charts | Images, comments, tracked deletions |
-| `.pptx` | Slide text, tables, speaker notes, the stored data of charts and the chart type | Pictures, the workbook embedded behind a chart |
-| `.xlsx`, `.xlsm` | Every sheet including hidden ones, stored values, the formula behind each cell, how a cell is displayed | Charts, pivot caches, macros |
-| `.pdf` | Text by page and line, ruled tables, and tables without rules inferred from where the numbers sit | Scanned pages and images |
-| `.csv`, `.tsv`, `.md`, `.txt` | Everything, with Markdown tables as tables | |
+Keep a short list of what was read and what was not: images, embedded objects, hidden rows and sheets, formulas without stored results, ambiguous number formats. This list feeds "Checked / Not checked" in the report.
 
-The output has four parts for each file:
+### 3. Apply the table and sentence rules
 
-- **Content**, with a location label on every line: `P12` paragraph, `T3 R4 C2` table cell, `S5 text 2` slide text, `Sheet!B7` cell, `p3 L14` PDF line.
-- **Leads**, in reading order: places where a rule fired, such as a total that differs from its parts, a product that breaks the pattern of its column, a `SUM` range that stops a row short, a weekday that does not match its date.
-- **What the rules covered**: how many totals, row calculations, weekdays and so on the rules tested and how many agreed. This shows what silence means. A rule that tested nothing has confirmed nothing.
-- **Notes**: what was read, what was not, hidden rows and sheets, ambiguous number formats.
+Go through `references/rules.md`. It lists the tests to run on every table, spreadsheet and sentence with figures: totals and subtotals against their parts, row calculations that hold in most rows and break in a few, share and percentage columns, averages, rate rows, units per column, `SUM` ranges, typed numbers among formulas, weekdays, durations, n of N, percentage points. Run each test as a calculation over every row, not on a sample.
 
-Tables longer than 60 rows are printed in part: the top, the bottom and every row a lead points to. The rules still test every row. Add `--all-rows` when the rows in between need reading, for example to look for outliers, and `--json` if structured output is easier to work with. If a file type is not supported, or the script cannot run, read the file by other means and carry on. For scanned pages and figures inside images, read them visually and say in the report that those figures were read by eye.
+Each place where a test fails is a **lead**. Also keep count, per test, of how many cases it checked and how many agreed. That count shows what silence means: a test that checked nothing has confirmed nothing.
 
-With pasted text, or with no code tool at all, work directly from the text.
-
-### 3. Read everything and note the figures
+### 4. Read everything and note the figures
 
 Read the full content, not only the leads. The rules see tables and a few sentence patterns. They do not see that the summary says 34% where the chart says 36%, that "five regions" is followed by four names, or that revenue "up 12%" is 9.6% by the table.
 
 While reading, keep track of each figure that matters: what it measures, its unit, the period and scope it refers to, and where it appears. Pay attention to every place the same quantity appears twice.
 
-### 4. Confirm the leads
+### 5. Confirm the leads
 
-A lead is a candidate, not a finding. For each one, look at the cell or sentence it points to and decide whether the rule applies there. Is that row really the total of those rows? Are the figures exact counts or rounded amounts? Is the "share" column a share of that total, or of something else? Then recompute it yourself.
+A lead is a candidate, not a finding. For each one, look at the cell or sentence it points to and decide whether the rule applies there. Is that row really the total of those rows? Are the figures exact counts or rounded amounts? Is the "share" column a share of that total, or of something else? Then recompute it.
 
 Drop the leads that do not hold. Then work out causes before writing anything:
 
 - **Merge leads that share a cause.** One wrong line item produces a wrong line total, subtotal and grand total. That is one finding with its knock-on effects listed.
 - **Find which figure is the faulty one.** When a total disagrees with its parts, either can be wrong. Test the figures that depend on it. If a subtotal fails but the grand total equals the correct sum plus tax, the subtotal is the slip and the grand total is right.
-- **Say when a suspicious figure is correct.** If a lead points at a cell that turns out to be right, such as a grand total that only looks wrong because a row total beside it is wrong, state in the finding that it is correct and should not be changed. The script marks many of these itself: a lead that says "Knock-on" or "the text cell is the cause" points at a correct cell, and belongs inside the finding for the cell it names, never in a row of its own.
+- **Say when a suspicious figure is correct.** A grand total can fail only because a row total beside it is wrong. Correct the row total, recompute, and if the grand total now holds, state in the finding that it is correct and should not be changed. Likewise, when a spreadsheet total is short by exactly the value of a number stored as text, the text cell is the cause and the total formula is fine.
 - **Recompute a knock-on from the corrected value** before calling it one. A figure downstream of an error is not automatically wrong.
 
-### 5. Run the checks the script cannot
+### 6. Run the checks the rules cannot
 
 Go through `references/checks.md` family by family: sums and derived figures stated in prose, percentages and growth rates, averages, counts and enumerations, durations and deadlines, units and magnitudes, text against tables and charts, summary against body, basic statistics, spreadsheet structure. Use the families that fit the material and skip the rest.
 
-When a percentage or a mean is reported with a sample size but without the underlying count, test whether it can come from whole numbers at all:
+When a percentage or a mean is reported with a sample size but without the underlying count, test whether it can come from whole numbers at all. The method is the GRIM test in `references/rules.md`.
 
-```
-python3 ${CLAUDE_SKILL_DIR}/scripts/adds_up.py grim --n 12 --percent 37.5
-python3 ${CLAUDE_SKILL_DIR}/scripts/adds_up.py grim --n 25 --mean 3.48
-```
-
-This test applies to proportions of n and to means of whole-number values such as scores or counts. It does not apply to growth rates, to shares of money, or when the count itself is given, in which case divide the count by n. It has little power when n is large and the figure has few decimals.
-
-### 6. Compute, never estimate
+### 7. Compute, never estimate
 
 Run every sum, product, ratio, percentage and date difference as a calculation. With a code tool, use code: `Decimal` for money, `datetime` for dates. Without one, write the working out step by step and mark the finding "worked by hand". Do not report a figure from mental arithmetic, and compute a discrepancy a second way before reporting it if the result surprised you.
 
-### 7. Several files
+### 8. Several files
 
 When more than one file is given, match the figures that measure the same thing (same quantity, period, unit and scope) across the files and compare them. Report a disagreement as a conflict and name both places. Do not decide which file is right, unless one is plainly the source of the other, such as the spreadsheet a slide was built from. In that case say so.
 
-### 8. Report
+### 9. Report
 
 Use the format below.
 
@@ -112,7 +92,7 @@ A typed total that disagrees with its parts is Wrong even when nothing else depe
 
 When one cause produces both a proven error and a disagreement, report one finding and give it the stronger verdict, in the order Wrong, Conflict, Query. When the material points to one reading without proving it, say which reading reconciles the figures and that it is likely, not proven. "With 34% the slices total 100%, so the chart value is the likelier slip."
 
-**Rounding.** A total of rounded figures can differ from the sum of the displayed parts. With n parts the gap can reach n/2 units of the last displayed digit in the worst case and is usually far smaller, so a gap of one unit is ordinary and a gap of three units across four parts is not. Counts of people, items, days or events are exact, and any difference in them is Wrong. Do not list ordinary rounding gaps as findings.
+**Rounding.** A total of rounded figures can differ from the sum of the displayed parts. With n parts the gap can reach n/2 units of the last displayed digit in the worst case and is usually far smaller, so a gap of one unit is ordinary and a gap of three units across four parts is not. `references/rules.md` gives the exact tolerance. Counts of people, items, days or events are exact, and any difference in them is Wrong. Do not list ordinary rounding gaps as findings.
 
 **No outside facts.** Judge the material against itself. Do not "correct" a market size, an exchange rate, a price or a clinical value from memory. If the right figure cannot be derived from the material, say which input is missing. Calendar facts (the weekday of a date, the days in a month), unit conversions and arithmetic are fair to use. A tax rate is fair only when the document states it.
 
@@ -132,7 +112,7 @@ Answer in the language of the user's request. Translate the column headings, the
 | Where / It says / The numbers give / Verdict | Wo / Dort steht / Die Zahlen ergeben / Urteil | Nerede / Belgede yazan / Hesap sonucu / Sonuç |
 | Checked / Not checked / Worth knowing | Geprüft / Nicht geprüft / Gut zu wissen | Kontrol edildi / Kontrol edilemedi / Bilmekte fayda var |
 
-Write numbers the way the document writes them. For a spreadsheet, use what the cell displays where the script shows it ("shown as 49.0%") and otherwise plain digits with thousands separators. Use `x` and `-` for the operators, or the typographic signs if the user's own writing uses them.
+Write numbers the way the document writes them. For a spreadsheet, use what the cell displays ("shown as 49.0%") where the number format is known, and otherwise plain digits with thousands separators. Use `x` and `-` for the operators, or the typographic signs if the user's own writing uses them.
 
 Structure:
 
@@ -178,7 +158,7 @@ No findings. Every figure I could test agrees with the others.
 
 Rules for the report:
 
-- Give the location in the reader's terms: section heading, table caption or the table's first header cell, row label, slide number, sheet and cell. Word files carry no page numbers in the extraction, so use headings and row labels. The script's labels (`P12`, `T3`) may follow in brackets but do not help on their own.
+- Give the location in the reader's terms: section heading, table caption or the table's first header cell, row label, slide number, sheet and cell. Word files carry no page numbers in their XML, so use headings and row labels.
 - One finding per root cause, with its knock-on effects inside it. When no single correction reconciles a table, report each independent discrepancy as its own finding and say that they may be linked.
 - When a correction depends on how another finding is settled, say so in one sentence.
 - For spreadsheets, name the cell and quote the formula. When a main total is hit by more than one finding, add one line after the working with the combined effect.

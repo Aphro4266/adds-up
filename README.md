@@ -59,15 +59,15 @@ Each finding comes with its working and its knock-on effects, for example the ta
 
 It judges a document against itself. It does not know whether your market size, exchange rate or clinical result is true, and it will not replace a figure from memory. It does not comment on wording, style or strategy. Figures that exist only inside pictures are read by eye and reported as such. It is a second pair of eyes, not an audit, and a clean report means that nothing was found in what could be checked.
 
-## How it works, and what it runs
+## How it works
 
-The plugin contains one skill and one Python script, `skills/check/scripts/adds_up.py`. There is no connector, no hook and no server.
+The plugin is one skill, made of instructions only: `skills/check/SKILL.md` and three reference files. There is no script, no connector, no hook and no server.
 
-When a code tool is available, Claude runs the script on the files you named. The script pulls out the text, the tables, the chart data, the speaker notes and, for spreadsheets, the formula behind each cell. It then applies fixed rules, for example "a row labelled Total should equal the rows above it", and prints the places where a rule fired. Claude confirms each of those against the document, reads the rest for what rules cannot see, recalculates every figure with code and writes the report.
+- `references/reading-files.md` tells Claude what to read in each file type, including text boxes, footnotes, chart data, speaker notes, hidden sheets and the formula behind each spreadsheet cell.
+- `references/rules.md` lists the tests Claude runs on every table and sentence, for example "a row labelled Total should equal the rows above it", with one rounding tolerance for all of them.
+- `references/checks.md` covers what rules cannot see, such as a summary that contradicts the body.
 
-The script uses the Python standard library only. It reads the files it is given and prints to the conversation. It writes no file, installs nothing, sends nothing anywhere and makes no network request. For PDFs it uses `pdfplumber` or `pypdf` if one of them is already installed and otherwise leaves the PDF for Claude to read directly. Your documents go nowhere beyond the Claude session you are already working in, and the plugin stores nothing.
-
-Where no code tool is available, Claude works from the text and writes out the arithmetic step by step.
+When a code tool is available, Claude reads your files and recalculates every figure with code. Where no code tool is available, Claude works from the text and writes out the arithmetic step by step. Your documents go nowhere beyond the Claude session you are already working in, and the plugin stores nothing.
 
 ## Try it
 
@@ -86,10 +86,10 @@ Where no code tool is available, Claude works from the text and writes out the a
 
 ## How much it helps
 
-I tested the plugin on two generated files with a known answer key: a 25-table annual review with 13 planted errors and a three-sheet workbook with 8. Each setting ran once or twice, so read these as an indication and not as a benchmark.
+I tested versions 0.1.0 and 0.2.0, which ran a bundled extraction script, on two generated files with a known answer key: a 25-table annual review with 13 planted errors and a three-sheet workbook with 8. Each setting ran once or twice, so read these as an indication and not as a benchmark. From version 0.2.1 the script is gone and Claude does the extraction itself, so these figures describe the earlier versions until they are re-run.
 
 | Model | Annual review, without | with Adds Up | Workbook, without | with Adds Up |
-|-------|-----------------------:|-------------:|------------------:|-------------:|
+|-------|--:|--:|--:|--:|
 | Claude's fastest model (Haiku) | 3 to 4 of 13 | 12 to 13 of 13 | 4 of 8 | 6 of 8 |
 | Mid-size model (Sonnet) | 13 of 13 | 13 of 13 | 8 of 8 | 8 of 8 |
 | Largest model | 13 of 13 | 13 of 13 | 8 of 8 | 8 of 8 |
@@ -98,16 +98,11 @@ With a code tool, the larger models found every planted error with or without th
 
 ## Requirements
 
-Python 3.8 or later for the script, in any environment where Claude can run code. Nothing needs to be installed.
+None. Claude works best with a code tool, which Cowork, Claude Code and Claude.ai with code execution provide.
 
-## Development
+## Feedback
 
-```
-python3 -m unittest discover -s tests -v
-python3 skills/check/scripts/adds_up.py extract examples/quarterly-report.md
-```
-
-Bug reports are most useful with the smallest table or sentence that shows the problem: a rule that fired where it should not have, or an error it walked past.
+Bug reports are most useful with the smallest table or sentence that shows the problem: a rule that fired where it should not have, or an error it walked past. Please open an issue.
 
 ## Licence
 

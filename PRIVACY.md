@@ -1,10 +1,10 @@
 # Privacy
 
-Adds Up is a set of instructions and one Python script that run inside your own Claude session. It has no server, no account and no connector.
+Adds Up is a set of instructions that run inside your own Claude session. It contains no code of its own and has no server, no account and no connector.
 
 ## What the plugin does with your documents
 
-When you ask Claude to check a file, Claude runs the bundled script on that file. The script reads the file, prints its text, tables and formulas into the conversation, and exits. It writes no file, keeps no copy, makes no network request and contains no analytics or tracking.
+When you ask Claude to check a file, the plugin's instructions tell Claude how to read the file and which calculations to run. Claude reads and checks the file inside your session, with the tools that session already has. The plugin writes no file, keeps no copy, makes no network request and contains no analytics or tracking.
 
 ## What the author receives
 
